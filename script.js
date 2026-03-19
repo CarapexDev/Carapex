@@ -2,14 +2,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const header = document.querySelector(".site-header");
   const mainNav = document.querySelector(".main-nav");
   const menuToggle = document.querySelector(".menu-toggle");
+  const navLinksList = mainNav ? mainNav.querySelector(".nav-links") : null;
 
   const getHeaderHeight = () => (header ? header.offsetHeight : 0);
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
   // Mobile nav toggle
   if (menuToggle && mainNav) {
+    if (navLinksList && !navLinksList.id) {
+      navLinksList.id = "primary-nav-links";
+    }
+    if (navLinksList) {
+      menuToggle.setAttribute("aria-controls", navLinksList.id);
+    }
+    menuToggle.setAttribute("aria-expanded", String(mainNav.classList.contains("open")));
     menuToggle.addEventListener("click", () => {
-      mainNav.classList.toggle("open");
+      const isOpen = mainNav.classList.toggle("open");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
     });
   }
 
@@ -35,7 +44,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       // Close mobile menu after navigation
-      if (mainNav) mainNav.classList.remove("open");
+      if (mainNav) {
+        mainNav.classList.remove("open");
+        if (menuToggle) menuToggle.setAttribute("aria-expanded", "false");
+      }
     });
   });
 
