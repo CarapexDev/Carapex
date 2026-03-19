@@ -173,6 +173,28 @@ Use for:
 - related enteric-coating precedent
 - highlight that derivative choice matters and not all chitosan-based systems perform equally
 
+Asset manifest for embeds:
+
+1. Title: `Increasing efficiency of the homogenization process for production of chitin nanofibers for barrier film applications`
+   Source file: `/Users/warrenkang/Downloads/carapex/papers/Increasing efficiency of the homogenization process for production of chitin nanofibers for barrier film applications.pdf`
+   Expected implementation step: copy into repo-hosted static assets for embed delivery
+
+2. Title: `Supramolecular cross-linking affords chitin nanofibril nanocomposites with high strength and water resistance`
+   Source file: `/Users/warrenkang/Downloads/carapex/papers/PVA Crosslinking to improve water barrier ChNF_s.pdf`
+   Expected implementation step: copy into repo-hosted static assets for embed delivery
+
+3. Title: `Naturally Drug-Loaded Chitin: Isolation and Applications`
+   Source file: `/Users/warrenkang/Downloads/carapex/papers/drug loaded chitin.pdf`
+   Expected implementation step: copy into repo-hosted static assets for embed delivery
+
+4. Title: `Preparation and Characterization of Chitosan Succinate as Coating Polymer for Enteric-Coated Tablet`
+   Source file: `/Users/warrenkang/Downloads/carapex/papers/enteric application/admin,+Journal+manager,+76_IJAP_76_RA.pdf`
+   Expected implementation step: copy into repo-hosted static assets for embed delivery
+
+5. Title: `Evaluation of chitosan succinate and chitosan phthalate as enteric coating polymers for diclofenac sodium tablets`
+   Source file: `/Users/warrenkang/Downloads/carapex/papers/enteric application/aiedeh2005.pdf`
+   Expected implementation step: copy into repo-hosted static assets for embed delivery
+
 ### 7. What Is Proven vs What We Are Testing
 
 Purpose:
@@ -205,6 +227,11 @@ Format:
 - Secondary references listed below in lighter form, without needing embeds
 
 Secondary references may include papers on chitosan film tuning, protonation chemistry, process kinetics, and other internal-background sources, but they should not dominate the page.
+
+Citation style:
+- Use a consistent compact scientific citation format across the page.
+- Inline research cards may use shortened author/year or title-shortform labels.
+- The References section should use one normalized style for all curated entries.
 
 ## Visual Direction
 
