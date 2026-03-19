@@ -18,11 +18,11 @@
       </a>
 
       <nav class="main-nav" aria-label="Primary navigation">
-        <button class="menu-toggle" aria-label="Toggle navigation">
+        <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-nav-links">
           <span></span>
           <span></span>
         </button>
-        <ul class="nav-links">
+        <ul class="nav-links" id="primary-nav-links">
           <li><a href="index.html#products">Products &amp; Solutions</a></li>
           <li><a href="index.html#applications">Applications</a></li>
           <li><a href="index.html#manufacturing">Manufacturing</a></li>
@@ -84,7 +84,7 @@
             </div>
             <div class="mechanism-flow">
               <p>Ambient moisture</p>
-              <p>H2O -> reduced ingress path length</p>
+              <p>H2O -> increased tortuous path through the coating</p>
             </div>
           </div>
           <div class="mechanism-legend">
@@ -145,6 +145,7 @@
             <thead>
               <tr>
                 <th scope="col">Dimension</th>
+                <th scope="col">Conventional incumbent logic</th>
                 <th scope="col">Published literature signal</th>
                 <th scope="col">Implication for InfinityCoat(TM)</th>
                 <th scope="col">Current confidence</th>
@@ -153,36 +154,42 @@
             <tbody>
               <tr>
                 <th scope="row">Oxygen barrier</th>
+                <td>PVA-based and other incumbent coatings are used widely for film formation, but barrier performance is not usually framed as the differentiating story on its own.</td>
                 <td>Chitin nanofiber films reported low oxygen permeability in solution-cast film studies. <span>[Lit. 1]</span></td>
                 <td>Supports evaluating chitin nanofiber layers where oxidative stability matters.</td>
                 <td>Literature-backed for films; not yet proven on Carapex dosage forms.</td>
               </tr>
               <tr>
                 <th scope="row">Humidity and wet-state integrity</th>
+                <td>Incumbent systems are generally judged on coat robustness and manufacturability, with additional additives or blends used when moisture resistance needs improvement.</td>
                 <td>Cross-linked chitin nanofibril composites retained high swollen-state modulus and improved oxygen barrier versus PVA alone. <span>[Lit. 2]</span></td>
                 <td>Suggests routes to strengthen barrier systems under moist conditions.</td>
                 <td>Indirect support; composite film context only.</td>
               </tr>
               <tr>
                 <th scope="row">Enteric coating precedent</th>
+                <td>Conventional enteric practice often relies on established derivative polymers and blend systems tuned for acid resistance and downstream release.</td>
                 <td>Chitosan-derivative coatings met delayed-release targets in selected formulations, while others did not. <span>[Lit. 4-5]</span></td>
                 <td>Shows chitin-derived polymers can be viable coating components when chemistry is tuned.</td>
                 <td>Moderate precedent; derivative-specific, not CNF-specific.</td>
               </tr>
               <tr>
                 <th scope="row">Manufacturing energy and throughput</th>
+                <td>Incumbent systems benefit from mature process knowledge and off-the-shelf formulations, so new materials must show a credible preparation path before scale claims are persuasive.</td>
                 <td>Partial deacetylation reduced required homogenization intensity while maintaining low oxygen permeability in the reported film work. <span>[Lit. 1]</span></td>
                 <td>Indicates a practical path to reduce fibrillation burden before scale-up studies.</td>
                 <td>Strong process signal in lab-scale film production.</td>
               </tr>
               <tr>
                 <th scope="row">Feedstock profile</th>
+                <td>Many incumbent coating polymers are fossil-derived and optimized primarily for performance and manufacturability rather than circular feedstock recovery.</td>
                 <td>Chitin is bio-based and widely recovered from shell-derived biomass streams; cited studies use water-based processing routes. <span>[Inference from Lit. 1-3]</span></td>
                 <td>Frames InfinityCoat(TM) as a renewable-materials investigation rather than a petrochemical-first coating strategy.</td>
                 <td>Directional only; no full sustainability accounting on this page.</td>
               </tr>
               <tr>
                 <th scope="row">Direct tablet and capsule evidence</th>
+                <td>Incumbent approaches already have commercial dosage-form precedent and standardized evaluation pathways.</td>
                 <td>No cited paper demonstrates InfinityCoat(TM) performance on Carapex formulations.</td>
                 <td>Tablet adhesion, coat quality, moisture protection, release behavior, and scale-up must still be demonstrated directly.</td>
                 <td>Validation in progress.</td>
@@ -258,9 +265,9 @@
               <strong>Support type:</strong> Direct support for barrier-film potential and processability inference. This remains a solution-cast film study, not a pharmaceutical tablet-coating study.
             </p>
             <object data="papers/increasing-efficiency-chitin-nanofibers-barrier-film.pdf" type="application/pdf" width="100%" height="420">
-              <p><a href="papers/increasing-efficiency-chitin-nanofibers-barrier-film.pdf">Open PDF</a></p>
+              <p><a href="papers/increasing-efficiency-chitin-nanofibers-barrier-film.pdf" aria-label="Open Lit. 1 PDF fallback: Increasing efficiency of the homogenization process for production of chitin nanofibers for barrier film applications">Open Lit. 1 PDF</a></p>
             </object>
-            <p class="library-actions"><a href="papers/increasing-efficiency-chitin-nanofibers-barrier-film.pdf">Open PDF</a></p>
+            <p class="library-actions"><a href="papers/increasing-efficiency-chitin-nanofibers-barrier-film.pdf" aria-label="Open Lit. 1 PDF: Increasing efficiency of the homogenization process for production of chitin nanofibers for barrier film applications">Open Lit. 1 PDF</a></p>
           </article>
 
           <article class="library-entry">
@@ -278,9 +285,9 @@
               <strong>Support type:</strong> Indirect support for humid-condition mechanics and barrier design. The system includes PVA and tannic acid in a packaging-film context rather than an oral coating formulation.
             </p>
             <object data="papers/chitin-nanofibril-nanocomposites-water-resistance.pdf" type="application/pdf" width="100%" height="420">
-              <p><a href="papers/chitin-nanofibril-nanocomposites-water-resistance.pdf">Open PDF</a></p>
+              <p><a href="papers/chitin-nanofibril-nanocomposites-water-resistance.pdf" aria-label="Open Lit. 2 PDF fallback: Supramolecular cross-linking affords chitin nanofibril nanocomposites with high strength and water resistance">Open Lit. 2 PDF</a></p>
             </object>
-            <p class="library-actions"><a href="papers/chitin-nanofibril-nanocomposites-water-resistance.pdf">Open PDF</a></p>
+            <p class="library-actions"><a href="papers/chitin-nanofibril-nanocomposites-water-resistance.pdf" aria-label="Open Lit. 2 PDF: Supramolecular cross-linking affords chitin nanofibril nanocomposites with high strength and water resistance">Open Lit. 2 PDF</a></p>
           </article>
 
           <article class="library-entry">
@@ -298,9 +305,9 @@
               <strong>Support type:</strong> Indirect support for chitin matrix interaction with active transport. It does not demonstrate oral dosage performance, tablet coating behavior, or InfinityCoat(TM) efficacy.
             </p>
             <object data="papers/naturally-drug-loaded-chitin.pdf" type="application/pdf" width="100%" height="420">
-              <p><a href="papers/naturally-drug-loaded-chitin.pdf">Open PDF</a></p>
+              <p><a href="papers/naturally-drug-loaded-chitin.pdf" aria-label="Open Lit. 3 PDF fallback: Naturally Drug-Loaded Chitin: Isolation and Applications">Open Lit. 3 PDF</a></p>
             </object>
-            <p class="library-actions"><a href="papers/naturally-drug-loaded-chitin.pdf">Open PDF</a></p>
+            <p class="library-actions"><a href="papers/naturally-drug-loaded-chitin.pdf" aria-label="Open Lit. 3 PDF: Naturally Drug-Loaded Chitin: Isolation and Applications">Open Lit. 3 PDF</a></p>
           </article>
 
           <article class="library-entry">
@@ -318,9 +325,9 @@
               <strong>Support type:</strong> Direct support for chitosan-derived enteric coating precedent, with an important caveat: this is derivative and co-blend evidence, not proof of InfinityCoat(TM) or chitin nanofiber coatings.
             </p>
             <object data="papers/chitosan-succinate-enteric-coated-tablet.pdf" type="application/pdf" width="100%" height="420">
-              <p><a href="papers/chitosan-succinate-enteric-coated-tablet.pdf">Open PDF</a></p>
+              <p><a href="papers/chitosan-succinate-enteric-coated-tablet.pdf" aria-label="Open Lit. 4 PDF fallback: Preparation and Characterization of Chitosan Succinate as Coating Polymer for Enteric-Coated Tablet">Open Lit. 4 PDF</a></p>
             </object>
-            <p class="library-actions"><a href="papers/chitosan-succinate-enteric-coated-tablet.pdf">Open PDF</a></p>
+            <p class="library-actions"><a href="papers/chitosan-succinate-enteric-coated-tablet.pdf" aria-label="Open Lit. 4 PDF: Preparation and Characterization of Chitosan Succinate as Coating Polymer for Enteric-Coated Tablet">Open Lit. 4 PDF</a></p>
           </article>
 
           <article class="library-entry">
@@ -338,9 +345,9 @@
               <strong>Support type:</strong> Direct support for formulation-selection discipline in chitosan-derived coatings. It is not Carapex-specific evidence and does not establish chitin nanofiber barrier performance by itself.
             </p>
             <object data="papers/chitosan-succinate-chitosan-phthalate-diclofenac.pdf" type="application/pdf" width="100%" height="420">
-              <p><a href="papers/chitosan-succinate-chitosan-phthalate-diclofenac.pdf">Open PDF</a></p>
+              <p><a href="papers/chitosan-succinate-chitosan-phthalate-diclofenac.pdf" aria-label="Open Lit. 5 PDF fallback: Evaluation of chitosan succinate and chitosan phthalate as enteric coating polymers for diclofenac sodium tablets">Open Lit. 5 PDF</a></p>
             </object>
-            <p class="library-actions"><a href="papers/chitosan-succinate-chitosan-phthalate-diclofenac.pdf">Open PDF</a></p>
+            <p class="library-actions"><a href="papers/chitosan-succinate-chitosan-phthalate-diclofenac.pdf" aria-label="Open Lit. 5 PDF: Evaluation of chitosan succinate and chitosan phthalate as enteric coating polymers for diclofenac sodium tablets">Open Lit. 5 PDF</a></p>
           </article>
         </div>
       </div>
@@ -391,19 +398,19 @@
         </p>
         <ol class="references-list">
           <li>
-            [Lit. 1] <cite>Increasing efficiency of the homogenization process for production of chitin nanofibers for barrier film applications</cite>.
+            [Lit. 1] Satam CC, Meredith JC. <cite>Increasing efficiency of the homogenization process for production of chitin nanofibers for barrier film applications</cite>. <em>Carbohydrate Polymers</em>. 2021;274:118658. doi:10.1016/j.carbpol.2021.118658.
           </li>
           <li>
-            [Lit. 2] <cite>Supramolecular cross-linking affords chitin nanofibril nanocomposites with high strength and water resistance</cite>.
+            [Lit. 2] Jiao D, Li Z, Hu JY, et al. <cite>Supramolecular cross-linking affords chitin nanofibril nanocomposites with high strength and water resistance</cite>. <em>Composites Science and Technology</em>. 2023;244:110295. doi:10.1016/j.compscitech.2023.110295.
           </li>
           <li>
-            [Lit. 3] <cite>Naturally Drug-Loaded Chitin: Isolation and Applications</cite>.
+            [Lit. 3] Kovalchuk V, Voronkina A, Binnewerg B, et al. <cite>Naturally Drug-Loaded Chitin: Isolation and Applications</cite>. <em>Marine Drugs</em>. 2019;17(10):574. doi:10.3390/md17100574.
           </li>
           <li>
-            [Lit. 4] <cite>Preparation and Characterization of Chitosan Succinate as Coating Polymer for Enteric-Coated Tablet</cite>.
+            [Lit. 4] Surini S, Prakoso K. <cite>Preparation and Characterization of Chitosan Succinate as Coating Polymer for Enteric-Coated Tablet</cite>. <em>International Journal of Applied Pharmaceutics</em>. 2018;10(Special Issue 1). doi:10.22159/ijap.2018.v10s1.76.
           </li>
           <li>
-            [Lit. 5] <cite>Evaluation of chitosan succinate and chitosan phthalate as enteric coating polymers for diclofenac sodium tablets</cite>.
+            [Lit. 5] Aiedeh KM, Taha MO, Al-Khatib H. <cite>Evaluation of chitosan succinate and chitosan phthalate as enteric coating polymers for diclofenac sodium tablets</cite>. <em>Journal of Drug Delivery Science and Technology</em>. 2005;15:207-211. doi:10.1016/S1773-2247(05)50033-9.
           </li>
         </ol>
         <p>
