@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact Carapex</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Contact Carapex about InfinityCoat(TM), pilot studies, technical diligence, and partnership conversations."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="contact-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html#landing" class="brand">
+        <img src="carapex_logoW.png" alt="Carapex logo" class="brand-mark" />
+      </a>
+
+      <nav class="main-nav" aria-label="Primary navigation">
+        <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-nav-links">
+          <span></span>
+          <span></span>
+        </button>
+        <ul class="nav-links" id="primary-nav-links">
+          <li><a href="index.html#products">Products &amp; Solutions</a></li>
+          <li><a href="index.html#applications">Applications</a></li>
+          <li><a href="index.html#manufacturing">Manufacturing</a></li>
+          <li><a href="index.html#rnd">R&amp;D</a></li>
+          <li><a href="science.html">Science</a></li>
+          <li><a href="index.html#company">Company</a></li>
+          <li><a href="contact.html" class="nav-cta is-active" aria-current="page">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section contact-page-section">
+      <div class="container">
+        <div class="contact-page-shell">
+          <article class="contact-form-panel">
+            <p class="eyebrow">Contact</p>
+            <h1>Contact Us</h1>
+            <p class="section-lead">
+              Reach out for pilot studies, formulation diligence, partner inquiries, or technical questions about
+              InfinityCoat<span class="trademark">™</span>.
+            </p>
+
+            <form
+              id="contact-form"
+              class="contact-card-form"
+              name="contact"
+              method="POST"
+              data-netlify="true"
+              netlify-honeypot="bot-field"
+            >
+              <input type="hidden" name="form-name" value="contact" />
+              <p class="visually-hidden">
+                <label for="contact-bot-field">Do not fill out this field</label>
+                <input id="contact-bot-field" name="bot-field" type="text" tabindex="-1" autocomplete="off" />
+              </p>
+
+              <div class="contact-form-grid">
+                <div class="contact-field">
+                  <label for="contact-name">Full name <span class="contact-required">*</span></label>
+                  <input
+                    id="contact-name"
+                    name="full-name"
+                    type="text"
+                    required
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                  />
+                </div>
+
+                <div class="contact-field">
+                  <label for="contact-email">Email address <span class="contact-required">*</span></label>
+                  <input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="name@company.com"
+                    autocomplete="email"
+                  />
+                </div>
+
+                <div class="contact-field">
+                  <label for="contact-company">Company or team</label>
+                  <input
+                    id="contact-company"
+                    name="company"
+                    type="text"
+                    placeholder="Your organization"
+                    autocomplete="organization"
+                  />
+                </div>
+
+                <div class="contact-field">
+                  <label for="contact-message">Your message <span class="contact-required">*</span></label>
+                  <textarea
+                    id="contact-message"
+                    name="message"
+                    required
+                    placeholder="Tell us about your formulation, program, or partnership interest."
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="contact-submit-row">
+                <button type="submit" class="contact-submit">Submit form</button>
+                <p class="contact-note">
+                  Prefer direct email? Reach us at
+                  <a href="mailto:info@carapex.co">info@carapex.co</a>.
+                </p>
+              </div>
+            </form>
+          </article>
+
+          <aside class="contact-map-panel" aria-label="Contact details and inquiry coverage">
+            <div class="contact-map-art" aria-hidden="true">
+              <span class="contact-map-road road-a"></span>
+              <span class="contact-map-road road-b"></span>
+              <span class="contact-map-road road-c"></span>
+              <span class="contact-map-road road-d"></span>
+              <span class="contact-map-road road-e"></span>
+
+              <span class="contact-map-block block-a"></span>
+              <span class="contact-map-block block-b"></span>
+              <span class="contact-map-block block-c"></span>
+              <span class="contact-map-block block-d"></span>
+              <span class="contact-map-block block-e"></span>
+              <span class="contact-map-block block-f"></span>
+              <span class="contact-map-block block-g"></span>
+              <span class="contact-map-block block-h"></span>
+
+              <span class="contact-map-chip chip-a">Pilot scope</span>
+              <span class="contact-map-chip chip-b">Partner calls</span>
+              <span class="contact-map-chip chip-c">Tech diligence</span>
+              <span class="contact-map-chip chip-d">Formulation fit</span>
+            </div>
+
+            <div class="contact-map-overlay">
+              <p class="contact-map-kicker">Carapex contact</p>
+              <h2>Start a conversation with the right team</h2>
+              <p>
+                We work with pharmaceutical manufacturers, CDMOs, and research collaborators exploring barrier
+                performance, stability, and scale-up readiness for InfinityCoat<span class="trademark">™</span>.
+              </p>
+
+              <div class="contact-detail-grid">
+                <div class="contact-detail-card">
+                  <span>Email</span>
+                  <a href="mailto:info@carapex.co">info@carapex.co</a>
+                </div>
+
+                <div class="contact-detail-card">
+                  <span>Typical topics</span>
+                  <p>Pilot studies, technical diligence, scale-up planning, and collaboration conversations.</p>
+                </div>
+              </div>
+
+              <a class="btn-outline contact-map-cta" href="science.html">Review the science</a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-wordmark">© 2025 Carapex.</span>
+        <span class="footer-meta">All rights reserved.</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#company">Company</a>
+        <a href="science.html">Science</a>
+        <a href="index.html#newsletter">Newsletter</a>
+        <a href="contact.html" aria-current="page">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
