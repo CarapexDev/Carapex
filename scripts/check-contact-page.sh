@@ -26,9 +26,8 @@ class ContactParser(HTMLParser):
         self.stack = []
         self.form_attrs = None
         self.inputs = {}
-        self.highlights = 0
-        self.routing_items = 0
-        self.science_cta = False
+        self.right_panel_present = False
+        self.partner_logo_present = False
 
     def _classes(self, attrs):
         return set(dict(attrs).get("class", "").split())
@@ -42,12 +41,10 @@ class ContactParser(HTMLParser):
             self.form_attrs = attrs
         if tag in {"input", "textarea"} and "name" in attrs:
             self.inputs[attrs["name"]] = attrs
-        if tag == "span" and any("contact-form-highlights" in classes for _, classes in self.stack):
-            self.highlights += 1
-        if tag == "li" and any("contact-routing-list" in classes for _, classes in self.stack):
-            self.routing_items += 1
-        if tag == "a" and attrs.get("href") == "science.html" and "contact-map-cta" in classes:
-            self.science_cta = True
+        if tag == "aside" and "contact-map-panel" in classes:
+            self.right_panel_present = True
+        if tag == "img" and attrs.get("src") == "tydra.png":
+            self.partner_logo_present = True
 
     def handle_endtag(self, tag):
         for index in range(len(self.stack) - 1, -1, -1):
@@ -64,9 +61,8 @@ checks = [
     ("full-name" in parser.inputs, "full-name field missing"),
     ("email" in parser.inputs, "email field missing"),
     ("message" in parser.inputs, "message field missing"),
-    (parser.highlights >= 3, "contact form highlight strip missing or incomplete"),
-    (parser.routing_items >= 3, "routing detail list missing or incomplete"),
-    (parser.science_cta, "science CTA missing from contact panel"),
+    (not parser.right_panel_present, "right-side contact panel should be removed"),
+    (parser.partner_logo_present, "contact page should include the current partner logo"),
 ]
 
 for ok, message in checks:
