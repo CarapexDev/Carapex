@@ -140,73 +140,176 @@ ws.addEventListener("open", async () => {
   try {
     await send("Page.enable");
     await send("Runtime.enable");
-    await send("Emulation.setDeviceMetricsOverride", {
-      width: 1600,
-      height: 900,
-      deviceScaleFactor: 1,
-      mobile: false
-    });
-    await send("Page.reload");
+    async function measureViewport(width, height) {
+      await send("Emulation.setDeviceMetricsOverride", {
+        width,
+        height,
+        deviceScaleFactor: 1,
+        mobile: false
+      });
+      await send("Page.reload");
 
-    const { result } = await send("Runtime.evaluate", {
-      expression: `
-        (async () => {
-          const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
+      const { result } = await send("Runtime.evaluate", {
+        expression: `
+          (async () => {
+            const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
-          if (document.readyState === "loading") {
-            await new Promise((resolve) => document.addEventListener("DOMContentLoaded", resolve, { once: true }));
-          }
+            if (document.readyState === "loading") {
+              await new Promise((resolve) => document.addEventListener("DOMContentLoaded", resolve, { once: true }));
+            }
 
-          await wait(250);
+            await wait(250);
 
-          const dots = Array.from(document.querySelectorAll(".hero-dot"));
-          const slides = Array.from(document.querySelectorAll(".hero-slide"));
-          const secondDot = dots[1];
+            const dots = Array.from(document.querySelectorAll(".hero-dot"));
+            const slides = Array.from(document.querySelectorAll(".hero-slide"));
+            const secondDot = dots[1];
 
-          secondDot?.click();
-          await wait(250);
+            secondDot?.click();
+            await wait(250);
 
-          const active = document.querySelector(".hero-slide.active");
-          const paragraph = active?.querySelector("p:last-of-type") || active?.querySelector("p");
-          const dotRect = secondDot?.getBoundingClientRect();
-          const activeRect = active?.getBoundingClientRect();
-          const paragraphRect = paragraph?.getBoundingClientRect();
+            const active = document.querySelector(".hero-slide.active");
+            const paragraph = active?.querySelector("p:last-of-type") || active?.querySelector("p");
+            const dotRect = secondDot?.getBoundingClientRect();
+            const activeRect = active?.getBoundingClientRect();
+            const paragraphRect = paragraph?.getBoundingClientRect();
+            const heroMainRect = document.querySelector(".hero-main")?.getBoundingClientRect();
+            const bottomPanelRect = document.querySelector(".hero-bottom-panel")?.getBoundingClientRect();
+            const contactCta = document.querySelector(".nav-cta");
+            const contactCtaRect = contactCta?.getBoundingClientRect();
+            const contactCtaRange = document.createRange();
+            if (contactCta) contactCtaRange.selectNodeContents(contactCta);
+            const contactCtaTextRect = contactCta ? contactCtaRange.getBoundingClientRect() : null;
+            const contactCtaAfterStyle = contactCta ? getComputedStyle(contactCta, "::after") : null;
 
-          return {
-            slideCount: slides.length,
-            dotCount: dots.length,
-            activeIndex: active?.dataset.index ?? null,
-            clickWorked: active?.dataset.index === "1",
-            dotWidth: dotRect?.width ?? 0,
-            dotHeight: dotRect?.height ?? 0,
-            targetSizeOk: (dotRect?.width ?? 0) >= 24 && (dotRect?.height ?? 0) >= 24,
-            activeClientHeight: active?.clientHeight ?? 0,
-            activeScrollHeight: active?.scrollHeight ?? 0,
-            contentFits: active ? active.scrollHeight <= active.clientHeight + 1 : false,
-            paragraphBottomWithinSlide: activeRect && paragraphRect
-              ? paragraphRect.bottom <= activeRect.bottom + 1
-              : false
-          };
-        })()
-      `,
-      awaitPromise: true,
-      returnByValue: true
-    });
+            return {
+              viewport: { width: ${width}, height: ${height} },
+              slideCount: slides.length,
+              dotCount: dots.length,
+              activeIndex: active?.dataset.index ?? null,
+              clickWorked: active?.dataset.index === "1",
+              dotWidth: dotRect?.width ?? 0,
+              dotHeight: dotRect?.height ?? 0,
+              targetSizeOk: (dotRect?.width ?? 0) >= 24 && (dotRect?.height ?? 0) >= 24,
+              activeClientHeight: active?.clientHeight ?? 0,
+              activeScrollHeight: active?.scrollHeight ?? 0,
+              contentFits: active ? active.scrollHeight <= active.clientHeight + 1 : false,
+              paragraphBottomWithinSlide: activeRect && paragraphRect
+                ? paragraphRect.bottom <= activeRect.bottom + 1
+                : false,
+              heroMainBottom: heroMainRect?.bottom ?? 0,
+              bottomPanelTop: bottomPanelRect?.top ?? 0,
+              heroGapOk: heroMainRect && bottomPanelRect
+                ? heroMainRect.bottom <= bottomPanelRect.top - 8
+                : false,
+              contactCtaUnderlineSuppressed: contactCtaAfterStyle
+                ? contactCtaAfterStyle.content === "none"
+                : false,
+              contactCtaVerticalCenterDelta: contactCtaRect && contactCtaTextRect
+                ? Math.abs(((contactCtaTextRect.top + contactCtaTextRect.bottom) / 2) - ((contactCtaRect.top + contactCtaRect.bottom) / 2))
+                : Infinity
+            };
+          })()
+        `,
+        awaitPromise: true,
+        returnByValue: true
+      });
 
-    const summary = result?.value;
-    if (!summary) closeWithError("homepage metrics could not be collected");
+      return result?.value;
+    }
+
+    async function measureMobileMenu(width, height) {
+      await send("Emulation.setDeviceMetricsOverride", {
+        width,
+        height,
+        deviceScaleFactor: 1,
+        mobile: true
+      });
+      await send("Page.reload");
+
+      const { result } = await send("Runtime.evaluate", {
+        expression: `
+          (async () => {
+            const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
+
+            if (document.readyState === "loading") {
+              await new Promise((resolve) => document.addEventListener("DOMContentLoaded", resolve, { once: true }));
+            }
+
+            await wait(250);
+
+            const button = document.querySelector(".menu-toggle");
+            const bars = Array.from(document.querySelectorAll(".menu-toggle span"));
+            const buttonRect = button?.getBoundingClientRect();
+            const deltas = bars.map((bar) => {
+              const rect = bar.getBoundingClientRect();
+              return ((rect.left + rect.right) / 2) - ((buttonRect.left + buttonRect.right) / 2);
+            });
+
+            return {
+              viewport: { width: ${width}, height: ${height} },
+              buttonVisible: !!button && button.offsetParent !== null,
+              barCount: bars.length,
+              maxCenterOffset: deltas.length ? Math.max(...deltas.map((delta) => Math.abs(delta))) : Infinity
+            };
+          })()
+        `,
+        awaitPromise: true,
+        returnByValue: true
+      });
+
+      return result?.value;
+    }
+
+    const desktopSummary = await measureViewport(1600, 900);
+    const compactSummary = await measureViewport(1366, 768);
+    const shortDesktopSummary = await measureViewport(1440, 700);
+    const mobileMenuSummary = await measureMobileMenu(375, 812);
+
+    if (!desktopSummary || !compactSummary || !shortDesktopSummary || !mobileMenuSummary) {
+      closeWithError("homepage metrics could not be collected");
+      return;
+    }
 
     const failures = [];
 
-    if (summary.slideCount !== 3) failures.push(`expected 3 hero slides, found ${summary.slideCount}`);
-    if (summary.dotCount !== 3) failures.push(`expected 3 hero dots, found ${summary.dotCount}`);
-    if (!summary.clickWorked) failures.push("clicking the second hero dot did not activate the second slide");
-    if (!summary.targetSizeOk) {
-      failures.push(`hero dot hit area is too small (${summary.dotWidth}x${summary.dotHeight}px)`);
+    if (desktopSummary.slideCount !== 3) failures.push(`expected 3 hero slides, found ${desktopSummary.slideCount}`);
+    if (desktopSummary.dotCount !== 3) failures.push(`expected 3 hero dots, found ${desktopSummary.dotCount}`);
+    if (!desktopSummary.clickWorked) failures.push("clicking the second hero dot did not activate the second slide");
+    if (!desktopSummary.targetSizeOk) {
+      failures.push(`hero dot hit area is too small (${desktopSummary.dotWidth}x${desktopSummary.dotHeight}px)`);
     }
-    if (!summary.contentFits || !summary.paragraphBottomWithinSlide) {
+    if (!desktopSummary.contentFits || !desktopSummary.paragraphBottomWithinSlide) {
       failures.push(
-        `hero slide content is clipped (clientHeight=${summary.activeClientHeight}, scrollHeight=${summary.activeScrollHeight})`
+        `hero slide content is clipped (clientHeight=${desktopSummary.activeClientHeight}, scrollHeight=${desktopSummary.activeScrollHeight})`
+      );
+    }
+    if (!desktopSummary.contactCtaUnderlineSuppressed) {
+      failures.push("contact CTA still exposes the standard nav underline pseudo-element");
+    }
+    if (desktopSummary.contactCtaVerticalCenterDelta > 1) {
+      failures.push(
+        `contact CTA label is vertically off-center by ${desktopSummary.contactCtaVerticalCenterDelta.toFixed(2)}px`
+      );
+    }
+    if (!compactSummary.heroGapOk) {
+      failures.push(
+        `hero copy overlaps the bottom panel at ${compactSummary.viewport.width}x${compactSummary.viewport.height} (heroMainBottom=${compactSummary.heroMainBottom}, bottomPanelTop=${compactSummary.bottomPanelTop})`
+      );
+    }
+    if (!shortDesktopSummary.heroGapOk) {
+      failures.push(
+        `hero copy overlaps the bottom panel at ${shortDesktopSummary.viewport.width}x${shortDesktopSummary.viewport.height} (heroMainBottom=${shortDesktopSummary.heroMainBottom}, bottomPanelTop=${shortDesktopSummary.bottomPanelTop})`
+      );
+    }
+    if (!mobileMenuSummary.buttonVisible) {
+      failures.push(`mobile menu toggle is not visible at ${mobileMenuSummary.viewport.width}x${mobileMenuSummary.viewport.height}`);
+    }
+    if (mobileMenuSummary.barCount !== 2) {
+      failures.push(`expected 2 hamburger bars, found ${mobileMenuSummary.barCount}`);
+    }
+    if (mobileMenuSummary.maxCenterOffset > 1) {
+      failures.push(
+        `mobile menu bars are off-center by ${mobileMenuSummary.maxCenterOffset}px at ${mobileMenuSummary.viewport.width}x${mobileMenuSummary.viewport.height}`
       );
     }
 
