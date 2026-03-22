@@ -68,34 +68,90 @@
           </article>
 
           <section class="hero-carousel" aria-label="InfinityCoat value highlights">
-            <div class="hero-slide active" data-index="0">
-              <p class="slide-kicker">01 • Stability &amp; shelf life</p>
-              <h3>Extend shelf life at the barrier</h3>
-              <p>
-                InfinityCoat<span class="trademark">™</span> forms dense, transparent films that slow oxygen-driven oxidation and moisture-driven hydrolysis — with a conservative shelf-life extension target of up to 120%.
-              </p>
-            </div>
+            <div class="hero-slides">
+              <div
+                class="hero-slide active"
+                data-index="0"
+                id="hero-panel-0"
+                role="tabpanel"
+                aria-labelledby="hero-tab-0"
+                aria-hidden="false"
+              >
+                <p class="slide-kicker">01 • Stability &amp; shelf life</p>
+                <h3>Extend shelf life at the barrier</h3>
+                <p>
+                  InfinityCoat<span class="trademark">™</span> forms dense, transparent films that slow oxygen-driven oxidation and moisture-driven hydrolysis — with a conservative shelf-life extension target of up to 120%.
+                </p>
+              </div>
 
-            <div class="hero-slide" data-index="1">
-              <p class="slide-kicker">02 • Economics &amp; supply chain</p>
-              <h3>Reduce expiry-driven write-offs</h3>
-              <p>
-                Globally, an estimated $33B of medicine expires before it can be used. By extending stability windows, InfinityCoat<span class="trademark">™</span> reduces waste, lowers re-manufacturing pressure, and helps manufacturers, healthcare providers, and consumers capture more value from every batch.
-              </p>
-            </div>
+              <div
+                class="hero-slide"
+                data-index="1"
+                id="hero-panel-1"
+                role="tabpanel"
+                aria-labelledby="hero-tab-1"
+                aria-hidden="true"
+              >
+                <p class="slide-kicker">02 • Economics &amp; supply chain</p>
+                <h3>Reduce expiry-driven write-offs</h3>
+                <p>
+                  Globally, an estimated $33B of medicine expires before it can be used. By extending stability windows, InfinityCoat<span class="trademark">™</span> reduces waste, lowers re-manufacturing pressure, and helps manufacturers, healthcare providers, and consumers capture more value from every batch.
+                </p>
+              </div>
 
-            <div class="hero-slide" data-index="2">
-              <p class="slide-kicker">03 • Sustainability</p>
-              <h3>Cut waste and plastic reliance</h3>
-              <p>
-                InfinityCoat<span class="trademark">™</span> is made from chitin nanofibers sourced from recycled organic material like crustacean shells or mushrooms. Longer shelf life can also reduce dependence on plastic blister packaging across the supply chain.
-              </p>
+              <div
+                class="hero-slide"
+                data-index="2"
+                id="hero-panel-2"
+                role="tabpanel"
+                aria-labelledby="hero-tab-2"
+                aria-hidden="true"
+              >
+                <p class="slide-kicker">03 • Sustainability</p>
+                <h3>Cut waste and plastic reliance</h3>
+                <p>
+                  InfinityCoat<span class="trademark">™</span> is made from chitin nanofibers sourced from recycled organic material like crustacean shells or mushrooms. Longer shelf life can also reduce dependence on plastic blister packaging across the supply chain.
+                </p>
+              </div>
             </div>
 
             <div class="hero-dots" role="tablist" aria-label="Hero slide selector">
-              <button class="hero-dot active" data-index="0" aria-label="Shelf-life extension slide" aria-pressed="true"></button>
-              <button class="hero-dot" data-index="1" aria-label="Economics &amp; supply chain slide" aria-pressed="false"></button>
-              <button class="hero-dot" data-index="2" aria-label="Sustainability benefits slide" aria-pressed="false"></button>
+              <button
+                class="hero-dot active"
+                id="hero-tab-0"
+                data-index="0"
+                type="button"
+                role="tab"
+                aria-controls="hero-panel-0"
+                aria-selected="true"
+                tabindex="0"
+              >
+                <span class="visually-hidden">Shelf-life extension slide</span>
+              </button>
+              <button
+                class="hero-dot"
+                id="hero-tab-1"
+                data-index="1"
+                type="button"
+                role="tab"
+                aria-controls="hero-panel-1"
+                aria-selected="false"
+                tabindex="-1"
+              >
+                <span class="visually-hidden">Economics and supply chain slide</span>
+              </button>
+              <button
+                class="hero-dot"
+                id="hero-tab-2"
+                data-index="2"
+                type="button"
+                role="tab"
+                aria-controls="hero-panel-2"
+                aria-selected="false"
+                tabindex="-1"
+              >
+                <span class="visually-hidden">Sustainability benefits slide</span>
+              </button>
             </div>
           </section>
         </div>
