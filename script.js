@@ -52,24 +52,30 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Hero carousel
+  const heroCarousel = document.querySelector(".hero-carousel");
   const slides = Array.from(document.querySelectorAll(".hero-slide"));
   const dots = Array.from(document.querySelectorAll(".hero-dot"));
   let current = 0;
   let heroTimer = null;
 
-  function setSlide(index) {
+  function setSlide(index, options = {}) {
     if (!slides.length) return;
     const total = slides.length;
     const next = ((index % total) + total) % total;
+    const shouldFocusDot = Boolean(options.focusDot);
 
     slides.forEach((slide, i) => {
-      slide.classList.toggle("active", i === next);
+      const isActive = i === next;
+      slide.classList.toggle("active", isActive);
+      slide.setAttribute("aria-hidden", String(!isActive));
     });
 
     dots.forEach((dot, i) => {
       const isActive = i === next;
       dot.classList.toggle("active", isActive);
-      dot.setAttribute("aria-pressed", String(isActive));
+      dot.setAttribute("aria-selected", String(isActive));
+      dot.tabIndex = isActive ? 0 : -1;
+      if (isActive && shouldFocusDot) dot.focus();
     });
 
     current = next;
@@ -84,13 +90,60 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (slides.length && dots.length) {
+    const moveBy = (delta, focusDot = false) => {
+      setSlide(current + delta, { focusDot });
+      startHeroTimer();
+    };
+
     dots.forEach((dot) => {
       dot.addEventListener("click", () => {
         const idx = parseInt(dot.dataset.index || "0", 10);
         setSlide(idx);
         startHeroTimer();
       });
+
+      dot.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+          event.preventDefault();
+          moveBy(1, true);
+        }
+
+        if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+          event.preventDefault();
+          moveBy(-1, true);
+        }
+
+        if (event.key === "Home") {
+          event.preventDefault();
+          setSlide(0, { focusDot: true });
+          startHeroTimer();
+        }
+
+        if (event.key === "End") {
+          event.preventDefault();
+          setSlide(slides.length - 1, { focusDot: true });
+          startHeroTimer();
+        }
+      });
     });
+
+    if (heroCarousel) {
+      heroCarousel.addEventListener("mouseenter", () => {
+        if (heroTimer) window.clearInterval(heroTimer);
+      });
+
+      heroCarousel.addEventListener("mouseleave", () => {
+        startHeroTimer();
+      });
+
+      heroCarousel.addEventListener("focusin", () => {
+        if (heroTimer) window.clearInterval(heroTimer);
+      });
+
+      heroCarousel.addEventListener("focusout", (event) => {
+        if (!heroCarousel.contains(event.relatedTarget)) startHeroTimer();
+      });
+    }
 
     setSlide(0);
     startHeroTimer();
