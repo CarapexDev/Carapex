@@ -140,73 +140,95 @@ ws.addEventListener("open", async () => {
   try {
     await send("Page.enable");
     await send("Runtime.enable");
-    await send("Emulation.setDeviceMetricsOverride", {
-      width: 1600,
-      height: 900,
-      deviceScaleFactor: 1,
-      mobile: false
-    });
-    await send("Page.reload");
+    async function measureViewport(width, height) {
+      await send("Emulation.setDeviceMetricsOverride", {
+        width,
+        height,
+        deviceScaleFactor: 1,
+        mobile: false
+      });
+      await send("Page.reload");
 
-    const { result } = await send("Runtime.evaluate", {
-      expression: `
-        (async () => {
-          const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
+      const { result } = await send("Runtime.evaluate", {
+        expression: `
+          (async () => {
+            const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
-          if (document.readyState === "loading") {
-            await new Promise((resolve) => document.addEventListener("DOMContentLoaded", resolve, { once: true }));
-          }
+            if (document.readyState === "loading") {
+              await new Promise((resolve) => document.addEventListener("DOMContentLoaded", resolve, { once: true }));
+            }
 
-          await wait(250);
+            await wait(250);
 
-          const dots = Array.from(document.querySelectorAll(".hero-dot"));
-          const slides = Array.from(document.querySelectorAll(".hero-slide"));
-          const secondDot = dots[1];
+            const dots = Array.from(document.querySelectorAll(".hero-dot"));
+            const slides = Array.from(document.querySelectorAll(".hero-slide"));
+            const secondDot = dots[1];
 
-          secondDot?.click();
-          await wait(250);
+            secondDot?.click();
+            await wait(250);
 
-          const active = document.querySelector(".hero-slide.active");
-          const paragraph = active?.querySelector("p:last-of-type") || active?.querySelector("p");
-          const dotRect = secondDot?.getBoundingClientRect();
-          const activeRect = active?.getBoundingClientRect();
-          const paragraphRect = paragraph?.getBoundingClientRect();
+            const active = document.querySelector(".hero-slide.active");
+            const paragraph = active?.querySelector("p:last-of-type") || active?.querySelector("p");
+            const dotRect = secondDot?.getBoundingClientRect();
+            const activeRect = active?.getBoundingClientRect();
+            const paragraphRect = paragraph?.getBoundingClientRect();
+            const heroMainRect = document.querySelector(".hero-main")?.getBoundingClientRect();
+            const bottomPanelRect = document.querySelector(".hero-bottom-panel")?.getBoundingClientRect();
 
-          return {
-            slideCount: slides.length,
-            dotCount: dots.length,
-            activeIndex: active?.dataset.index ?? null,
-            clickWorked: active?.dataset.index === "1",
-            dotWidth: dotRect?.width ?? 0,
-            dotHeight: dotRect?.height ?? 0,
-            targetSizeOk: (dotRect?.width ?? 0) >= 24 && (dotRect?.height ?? 0) >= 24,
-            activeClientHeight: active?.clientHeight ?? 0,
-            activeScrollHeight: active?.scrollHeight ?? 0,
-            contentFits: active ? active.scrollHeight <= active.clientHeight + 1 : false,
-            paragraphBottomWithinSlide: activeRect && paragraphRect
-              ? paragraphRect.bottom <= activeRect.bottom + 1
-              : false
-          };
-        })()
-      `,
-      awaitPromise: true,
-      returnByValue: true
-    });
+            return {
+              viewport: { width: ${width}, height: ${height} },
+              slideCount: slides.length,
+              dotCount: dots.length,
+              activeIndex: active?.dataset.index ?? null,
+              clickWorked: active?.dataset.index === "1",
+              dotWidth: dotRect?.width ?? 0,
+              dotHeight: dotRect?.height ?? 0,
+              targetSizeOk: (dotRect?.width ?? 0) >= 24 && (dotRect?.height ?? 0) >= 24,
+              activeClientHeight: active?.clientHeight ?? 0,
+              activeScrollHeight: active?.scrollHeight ?? 0,
+              contentFits: active ? active.scrollHeight <= active.clientHeight + 1 : false,
+              paragraphBottomWithinSlide: activeRect && paragraphRect
+                ? paragraphRect.bottom <= activeRect.bottom + 1
+                : false,
+              heroMainBottom: heroMainRect?.bottom ?? 0,
+              bottomPanelTop: bottomPanelRect?.top ?? 0,
+              heroGapOk: heroMainRect && bottomPanelRect
+                ? heroMainRect.bottom <= bottomPanelRect.top - 8
+                : false
+            };
+          })()
+        `,
+        awaitPromise: true,
+        returnByValue: true
+      });
 
-    const summary = result?.value;
-    if (!summary) closeWithError("homepage metrics could not be collected");
+      return result?.value;
+    }
+
+    const desktopSummary = await measureViewport(1600, 900);
+    const compactSummary = await measureViewport(1366, 768);
+
+    if (!desktopSummary || !compactSummary) {
+      closeWithError("homepage metrics could not be collected");
+      return;
+    }
 
     const failures = [];
 
-    if (summary.slideCount !== 3) failures.push(`expected 3 hero slides, found ${summary.slideCount}`);
-    if (summary.dotCount !== 3) failures.push(`expected 3 hero dots, found ${summary.dotCount}`);
-    if (!summary.clickWorked) failures.push("clicking the second hero dot did not activate the second slide");
-    if (!summary.targetSizeOk) {
-      failures.push(`hero dot hit area is too small (${summary.dotWidth}x${summary.dotHeight}px)`);
+    if (desktopSummary.slideCount !== 3) failures.push(`expected 3 hero slides, found ${desktopSummary.slideCount}`);
+    if (desktopSummary.dotCount !== 3) failures.push(`expected 3 hero dots, found ${desktopSummary.dotCount}`);
+    if (!desktopSummary.clickWorked) failures.push("clicking the second hero dot did not activate the second slide");
+    if (!desktopSummary.targetSizeOk) {
+      failures.push(`hero dot hit area is too small (${desktopSummary.dotWidth}x${desktopSummary.dotHeight}px)`);
     }
-    if (!summary.contentFits || !summary.paragraphBottomWithinSlide) {
+    if (!desktopSummary.contentFits || !desktopSummary.paragraphBottomWithinSlide) {
       failures.push(
-        `hero slide content is clipped (clientHeight=${summary.activeClientHeight}, scrollHeight=${summary.activeScrollHeight})`
+        `hero slide content is clipped (clientHeight=${desktopSummary.activeClientHeight}, scrollHeight=${desktopSummary.activeScrollHeight})`
+      );
+    }
+    if (!compactSummary.heroGapOk) {
+      failures.push(
+        `hero copy overlaps the bottom panel at ${compactSummary.viewport.width}x${compactSummary.viewport.height} (heroMainBottom=${compactSummary.heroMainBottom}, bottomPanelTop=${compactSummary.bottomPanelTop})`
       );
     }
 

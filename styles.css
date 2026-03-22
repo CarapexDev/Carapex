@@ -554,6 +554,64 @@ p {
   background: linear-gradient(90deg, #22d3ee, #a855f7);
 }
 
+@media (min-width: 1025px) and (max-height: 860px) {
+  .hero-inner {
+    padding: 52px 0 150px;
+  }
+
+  .hero-main {
+    max-width: 500px;
+  }
+
+  .hero-main h1 {
+    font-size: clamp(2.35rem, 3.2vw, 2.95rem);
+    line-height: 0.98;
+  }
+
+  .hero-lead {
+    margin-top: 12px;
+    font-size: 0.92rem;
+    max-width: 500px;
+  }
+
+  .hero-badges {
+    margin-top: 16px;
+    gap: 8px;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+
+  .hero-chip {
+    padding: 16px 18px 18px;
+  }
+
+  .chip-title {
+    font-size: 1rem;
+  }
+
+  .hero-carousel {
+    gap: 12px;
+    padding: 16px 20px 14px;
+  }
+
+  .slide-kicker {
+    font-size: 0.74rem;
+    margin-bottom: 6px;
+  }
+
+  .hero-slide h3 {
+    font-size: 0.96rem;
+    margin-bottom: 2px;
+  }
+
+  .hero-slide p {
+    font-size: 0.82rem;
+  }
+}
+
 /* Scroll indicator */
 
 .scroll-indicator {
