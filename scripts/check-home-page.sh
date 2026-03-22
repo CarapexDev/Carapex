@@ -174,6 +174,12 @@ ws.addEventListener("open", async () => {
             const paragraphRect = paragraph?.getBoundingClientRect();
             const heroMainRect = document.querySelector(".hero-main")?.getBoundingClientRect();
             const bottomPanelRect = document.querySelector(".hero-bottom-panel")?.getBoundingClientRect();
+            const contactCta = document.querySelector(".nav-cta");
+            const contactCtaRect = contactCta?.getBoundingClientRect();
+            const contactCtaRange = document.createRange();
+            if (contactCta) contactCtaRange.selectNodeContents(contactCta);
+            const contactCtaTextRect = contactCta ? contactCtaRange.getBoundingClientRect() : null;
+            const contactCtaAfterStyle = contactCta ? getComputedStyle(contactCta, "::after") : null;
 
             return {
               viewport: { width: ${width}, height: ${height} },
@@ -194,7 +200,13 @@ ws.addEventListener("open", async () => {
               bottomPanelTop: bottomPanelRect?.top ?? 0,
               heroGapOk: heroMainRect && bottomPanelRect
                 ? heroMainRect.bottom <= bottomPanelRect.top - 8
-                : false
+                : false,
+              contactCtaUnderlineSuppressed: contactCtaAfterStyle
+                ? contactCtaAfterStyle.content === "none"
+                : false,
+              contactCtaVerticalCenterDelta: contactCtaRect && contactCtaTextRect
+                ? Math.abs(((contactCtaTextRect.top + contactCtaTextRect.bottom) / 2) - ((contactCtaRect.top + contactCtaRect.bottom) / 2))
+                : Infinity
             };
           })()
         `,
@@ -269,6 +281,14 @@ ws.addEventListener("open", async () => {
     if (!desktopSummary.contentFits || !desktopSummary.paragraphBottomWithinSlide) {
       failures.push(
         `hero slide content is clipped (clientHeight=${desktopSummary.activeClientHeight}, scrollHeight=${desktopSummary.activeScrollHeight})`
+      );
+    }
+    if (!desktopSummary.contactCtaUnderlineSuppressed) {
+      failures.push("contact CTA still exposes the standard nav underline pseudo-element");
+    }
+    if (desktopSummary.contactCtaVerticalCenterDelta > 1) {
+      failures.push(
+        `contact CTA label is vertically off-center by ${desktopSummary.contactCtaVerticalCenterDelta.toFixed(2)}px`
       );
     }
     if (!compactSummary.heroGapOk) {
