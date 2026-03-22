@@ -205,10 +205,55 @@ ws.addEventListener("open", async () => {
       return result?.value;
     }
 
+    async function measureMobileMenu(width, height) {
+      await send("Emulation.setDeviceMetricsOverride", {
+        width,
+        height,
+        deviceScaleFactor: 1,
+        mobile: true
+      });
+      await send("Page.reload");
+
+      const { result } = await send("Runtime.evaluate", {
+        expression: `
+          (async () => {
+            const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
+
+            if (document.readyState === "loading") {
+              await new Promise((resolve) => document.addEventListener("DOMContentLoaded", resolve, { once: true }));
+            }
+
+            await wait(250);
+
+            const button = document.querySelector(".menu-toggle");
+            const bars = Array.from(document.querySelectorAll(".menu-toggle span"));
+            const buttonRect = button?.getBoundingClientRect();
+            const deltas = bars.map((bar) => {
+              const rect = bar.getBoundingClientRect();
+              return ((rect.left + rect.right) / 2) - ((buttonRect.left + buttonRect.right) / 2);
+            });
+
+            return {
+              viewport: { width: ${width}, height: ${height} },
+              buttonVisible: !!button && button.offsetParent !== null,
+              barCount: bars.length,
+              maxCenterOffset: deltas.length ? Math.max(...deltas.map((delta) => Math.abs(delta))) : Infinity
+            };
+          })()
+        `,
+        awaitPromise: true,
+        returnByValue: true
+      });
+
+      return result?.value;
+    }
+
     const desktopSummary = await measureViewport(1600, 900);
     const compactSummary = await measureViewport(1366, 768);
+    const shortDesktopSummary = await measureViewport(1440, 700);
+    const mobileMenuSummary = await measureMobileMenu(375, 812);
 
-    if (!desktopSummary || !compactSummary) {
+    if (!desktopSummary || !compactSummary || !shortDesktopSummary || !mobileMenuSummary) {
       closeWithError("homepage metrics could not be collected");
       return;
     }
@@ -229,6 +274,22 @@ ws.addEventListener("open", async () => {
     if (!compactSummary.heroGapOk) {
       failures.push(
         `hero copy overlaps the bottom panel at ${compactSummary.viewport.width}x${compactSummary.viewport.height} (heroMainBottom=${compactSummary.heroMainBottom}, bottomPanelTop=${compactSummary.bottomPanelTop})`
+      );
+    }
+    if (!shortDesktopSummary.heroGapOk) {
+      failures.push(
+        `hero copy overlaps the bottom panel at ${shortDesktopSummary.viewport.width}x${shortDesktopSummary.viewport.height} (heroMainBottom=${shortDesktopSummary.heroMainBottom}, bottomPanelTop=${shortDesktopSummary.bottomPanelTop})`
+      );
+    }
+    if (!mobileMenuSummary.buttonVisible) {
+      failures.push(`mobile menu toggle is not visible at ${mobileMenuSummary.viewport.width}x${mobileMenuSummary.viewport.height}`);
+    }
+    if (mobileMenuSummary.barCount !== 2) {
+      failures.push(`expected 2 hamburger bars, found ${mobileMenuSummary.barCount}`);
+    }
+    if (mobileMenuSummary.maxCenterOffset > 1) {
+      failures.push(
+        `mobile menu bars are off-center by ${mobileMenuSummary.maxCenterOffset}px at ${mobileMenuSummary.viewport.width}x${mobileMenuSummary.viewport.height}`
       );
     }
 
